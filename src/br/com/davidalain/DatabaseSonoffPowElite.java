@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,16 +28,16 @@ public class DatabaseSonoffPowElite {
 	}
 
 	//==
-	
-	public double calculateConsumption(Date minDateIni, Date maxDateEnd) {
+
+	public double calculateConsumption(Date minDate, Date maxDate) {
 
 		return this.database
 				.stream()
-				.filter(entry -> entry.belongsTo(minDateIni, maxDateEnd))
+				.filter(entry -> entry.belongsTo(minDate, maxDate))
 				.map(entry -> entry.consumption)
 				.reduce(0.0, Double::sum);
 	}
-	
+
 	private Map<String, Double> calculateConsumptionBy(SimpleDateFormat sdf) {
 
 		return this.database
@@ -63,7 +64,7 @@ public class DatabaseSonoffPowElite {
 								)
 						);
 	}
-	
+
 	private List<Entry<String, Double>> calculateConsumptionBySorted(SimpleDateFormat sdf) {
 
 		return calculateConsumptionBy(sdf)
@@ -80,14 +81,14 @@ public class DatabaseSonoffPowElite {
 				.collect(Collectors.toList());
 	}
 
-	private List<Entry<String, Double>> calculateConsumptionBySorted(Date minDate, Date maxDate, SimpleDateFormat simpleDateFormat) {
+	private List<Entry<String, Double>> calculateConsumptionBySorted(Date minDate, Date maxDate, SimpleDateFormat sdf) {
 
-		return calculateConsumptionBy(minDate, maxDate, simpleDateFormat)
+		return calculateConsumptionBy(minDate, maxDate, sdf)
 				.entrySet()
 				.stream()
 				.sorted((e1,e2) -> {
 					try {
-						return simpleDateFormat.parse(e1.getKey()).compareTo(simpleDateFormat.parse(e2.getKey()));
+						return sdf.parse(e1.getKey()).compareTo(sdf.parse(e2.getKey()));
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
@@ -95,37 +96,37 @@ public class DatabaseSonoffPowElite {
 				})
 				.collect(Collectors.toList());
 	}
-	
-	//==
-
-	public Map<String, Double> calculateConsumptionByDay(Date minDateIni, Date maxDateEnd) {
-		return calculateConsumptionBy(minDateIni, maxDateEnd, SDF_DAY_MONTH_YEAR);
-	}
-
-	public Map<String, Double> calculateConsumptionByMonth(Date minDateIni, Date maxDateEnd) {
-		return calculateConsumptionBy(minDateIni, maxDateEnd, SDF_MONTH_YEAR);
-	}
-
-	public Map<String, Double> calculateConsumptionByYear(Date minDateIni, Date maxDateEnd) {
-		return calculateConsumptionBy(minDateIni, maxDateEnd, SDF_YEAR);
-	}
 
 	//==
-	
-	public List<Entry<String, Double>> calculateConsumptionByDaySorted(Date minDateIni, Date maxDateEnd) {
-		return calculateConsumptionBySorted(minDateIni, maxDateEnd, SDF_DAY_MONTH_YEAR);
+
+	public Map<String, Double> calculateConsumptionByDay(Date minDate, Date maxDate) {
+		return calculateConsumptionBy(minDate, maxDate, SDF_DAY_MONTH_YEAR);
 	}
 
-	public List<Entry<String, Double>> calculateConsumptionByMonthSorted(Date minDateIni, Date maxDateEnd) {
-		return calculateConsumptionBySorted(minDateIni, maxDateEnd, SDF_MONTH_YEAR);
+	public Map<String, Double> calculateConsumptionByMonth(Date minDate, Date maxDate) {
+		return calculateConsumptionBy(minDate, maxDate, SDF_MONTH_YEAR);
 	}
 
-	public List<Entry<String, Double>> calculateConsumptionByYearSorted(Date minDateIni, Date maxDateEnd) {
-		return calculateConsumptionBySorted(minDateIni, maxDateEnd, SDF_YEAR);
+	public Map<String, Double> calculateConsumptionByYear(Date minDate, Date maxDate) {
+		return calculateConsumptionBy(minDate, maxDate, SDF_YEAR);
 	}
-	
+
 	//==
-	
+
+	public List<Entry<String, Double>> calculateConsumptionByDaySorted(Date minDate, Date maxDate) {
+		return calculateConsumptionBySorted(minDate, maxDate, SDF_DAY_MONTH_YEAR);
+	}
+
+	public List<Entry<String, Double>> calculateConsumptionByMonthSorted(Date minDate, Date maxDate) {
+		return calculateConsumptionBySorted(minDate, maxDate, SDF_MONTH_YEAR);
+	}
+
+	public List<Entry<String, Double>> calculateConsumptionByYearSorted(Date minDate, Date maxDate) {
+		return calculateConsumptionBySorted(minDate, maxDate, SDF_YEAR);
+	}
+
+	//==
+
 	public Map<String, Double> calculateConsumptionByDay() {
 		return calculateConsumptionBy(SDF_DAY_MONTH_YEAR);
 	}
@@ -139,7 +140,7 @@ public class DatabaseSonoffPowElite {
 	}
 
 	//==
-	
+
 	public List<Entry<String, Double>> calculateConsumptionByDaySorted() {
 		return calculateConsumptionBySorted(SDF_DAY_MONTH_YEAR);
 	}
@@ -151,7 +152,58 @@ public class DatabaseSonoffPowElite {
 	public List<Entry<String, Double>> calculateConsumptionByYearSorted() {
 		return calculateConsumptionBySorted(SDF_YEAR);
 	}
-	
+
+	//==
+
+	public String toStringByDaySorted(Date minDate, Date maxDate) {
+		return toString(calculateConsumptionBySorted(minDate, maxDate, SDF_DAY_MONTH_YEAR));
+	}
+
+	public String toStringByMonthSorted(Date minDate, Date maxDate) {
+		return toString(calculateConsumptionBySorted(minDate, maxDate, SDF_MONTH_YEAR));
+	}
+
+	public String toStringByYearSorted(Date minDate, Date maxDate) {
+		return toString(calculateConsumptionBySorted(minDate, maxDate, SDF_YEAR));
+	}
+
+	//==
+
+	public String toStringByDaySorted() {
+		return toString(calculateConsumptionBySorted(SDF_DAY_MONTH_YEAR));
+	}
+
+	public String toStringByMonthSorted() {
+		return toString(calculateConsumptionBySorted(SDF_MONTH_YEAR));
+	}
+
+	public String toStringByYearSorted() {
+		return toString(calculateConsumptionBySorted(SDF_YEAR));
+	}
+
+	//==
+
+	@SuppressWarnings("unused")
+	private static <K,V> String toString(Map<K,V> map){
+
+		return map
+				.entrySet()
+				.stream()
+				.map(entry -> entry.toString())
+				.collect(Collectors.joining("\r\n"));
+
+	}
+
+	private static <T> String toString(Collection<T> collection){
+
+		return collection
+				.stream()
+				.map(entry -> entry.toString())
+				.collect(Collectors.joining("\r\n"));
+
+	}
+
+	//==
 
 	private static List<EntrySonoffPowElite> readFile(String csvFilepath){
 

@@ -2,7 +2,7 @@ package br.com.davidalain;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.stream.Collectors;
+import java.util.Date;
 
 public class Main {
 
@@ -18,51 +18,34 @@ public class Main {
 
 		final String minDateTimeStr = minDateOnlyStr + " 00:00";
 		final String maxDateTimeStr = maxDateOnlyStr + " 23:59";
-
+		
+		//========
+		
 		final DatabaseSonoffPowElite databaseSonoffPowElite = new DatabaseSonoffPowElite(csvFilePath);
 
-		final double consumptionInPeriod = databaseSonoffPowElite.calculateConsumption(
-				SDF.parse(minDateTimeStr), 
-				SDF.parse(maxDateTimeStr)
-				);
+		final Date minDateTime = SDF.parse(minDateTimeStr);
+		final Date maxDateTime = SDF.parse(maxDateTimeStr);
 
 		System.out.println(
 				"De  " + minDateTimeStr 
 				+ "\r\n" 
 				+ "Até " + maxDateTimeStr 
 				+ "\r\n" 
-				+ "Consumo (kWh): " + consumptionInPeriod);
+				+ "Consumo (kWh): " 
+				+ databaseSonoffPowElite.calculateConsumption(minDateTime, maxDateTime));
 
 		System.out.println();
-		System.out.println("Por dia:\r\n" +
-				databaseSonoffPowElite.calculateConsumptionByDaySorted(
-						SDF.parse(minDateTimeStr), 
-						SDF.parse(maxDateTimeStr)
-						)
-		.stream()
-		.map(entry -> entry.toString())
-		.collect(Collectors.joining("\r\n")));
+		System.out.println("Por dia:\r\n" + 
+				databaseSonoffPowElite.toStringByDaySorted(minDateTime, maxDateTime));
 
 		System.out.println();
 		System.out.println("Por mês:\r\n" +
-				databaseSonoffPowElite.calculateConsumptionByMonthSorted(
-						SDF.parse(minDateTimeStr), 
-						SDF.parse(maxDateTimeStr)
-						)
-		.stream()
-		.map(entry -> entry.toString())
-		.collect(Collectors.joining("\r\n")));
+				databaseSonoffPowElite.toStringByMonthSorted(minDateTime, maxDateTime));
 
 		System.out.println();
 		System.out.println("Por ano:\r\n" +
-				databaseSonoffPowElite.calculateConsumptionByYearSorted(
-						SDF.parse(minDateTimeStr), 
-						SDF.parse(maxDateTimeStr)
-						)
-		.stream()
-		.map(entry -> entry.toString())
-		.collect(Collectors.joining("\r\n")));
-
+				databaseSonoffPowElite.toStringByYearSorted(minDateTime, maxDateTime));
 	}
+
 
 }
