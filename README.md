@@ -1,10 +1,10 @@
 # ConsumoEnergiaSonoffPOW
 
-Projeto Java simples para calcular o consumo de energia medido por um SONOFF POW ELITE entre um período de tempo data e hora inicial e final.
+Projeto Java simples para calcular o consumo de energia medido por um SONOFF POW ELITE entre um período de tempo com data e hora inicial e final.
 
-O SONOFF POW ELITE consegue medir o consumo e armazenar os valores em kWh a cada hora. Um arquivo CSV é fornecido pelo App EweLink contendo as medições dos últimos meses.
+O [SONOFF POW ELITE](https://sonoff.tech/product/diy-smart-switches/pow-elite/) consegue medir o consumo e armazenar os valores em kWh a cada hora. Um arquivo CSV é fornecido pelo App eWeLink contendo as medições dos últimos meses.
 
-Este projeto utiliza o como entrada arquivo CSV entregue pelo App Ewelink.
+Este projeto utiliza o como entrada arquivo CSV entregue pelo App eWeLink.
 
 Exemplo de linhas do CSV:
 ```
