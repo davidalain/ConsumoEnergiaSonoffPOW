@@ -4,9 +4,9 @@ Projeto Java simples para calcular o consumo de energia medido por um SONOFF POW
 
 O [SONOFF POW ELITE](https://sonoff.tech/product/diy-smart-switches/pow-elite/) consegue medir o consumo e armazenar os valores em kWh a cada hora. Um arquivo CSV é fornecido pelo App eWeLink contendo as medições dos últimos meses.
 
-Este projeto utiliza o como entrada arquivo CSV entregue pelo App eWeLink.
+Este projeto utiliza como entrada o arquivo CSV entregue pelo App eWeLink.
 
-Exemplo de linhas do CSV:
+Exemplo de linhas do arquivo CSV:
 ```
 data,time,consumption/KWh
 2024/1/28,12:00-13:00,0
