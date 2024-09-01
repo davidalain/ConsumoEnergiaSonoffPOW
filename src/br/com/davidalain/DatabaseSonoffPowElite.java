@@ -24,7 +24,7 @@ public class DatabaseSonoffPowElite {
 	private final List<EntrySonoffPowElite> database;
 
 	public DatabaseSonoffPowElite(String csvFilepath) {
-		this.database = DatabaseSonoffPowElite.readFile(csvFilepath);
+		this.database = DatabaseSonoffPowElite.readCSVFile(csvFilepath);
 	}
 
 	//==
@@ -205,7 +205,7 @@ public class DatabaseSonoffPowElite {
 
 	//==
 
-	private static List<EntrySonoffPowElite> readFile(String csvFilepath){
+	private static List<EntrySonoffPowElite> readCSVFile(String csvFilepath){
 
 		return DatabaseSonoffPowElite.readLines(csvFilepath)
 				.stream()

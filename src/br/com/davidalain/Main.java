@@ -11,28 +11,30 @@ public class Main {
 	public static void main(String[] args) throws ParseException {
 
 		final String path = "C:\\Users\\david\\Downloads\\";
-		final String csvFilePath = path + "History_2024.01.28-2024.08.04_UTC -3.csv";
+		final String csvFilePath = path + "History_2024.02.25-2024.09.01_UTC -3 72.csv";
 
-		final String minDateOnlyStr = "21/06/2024";
-		final String maxDateOnlyStr = "23/07/2024";
+		final String minDateToFilterStr = "15/07/2024";
+		final String maxDateToFilterStr = "15/08/2024";
 
-		final String minDateTimeStr = minDateOnlyStr + " 00:00";
-		final String maxDateTimeStr = maxDateOnlyStr + " 23:59";
+		final String minDateTimeToFilterStr = minDateToFilterStr + " 12:00";
+		final String maxDateTimeToFilterStr = maxDateToFilterStr + " 12:00";
 		
 		//========
 		
 		final DatabaseSonoffPowElite databaseSonoffPowElite = new DatabaseSonoffPowElite(csvFilePath);
 
-		final Date minDateTime = SDF.parse(minDateTimeStr);
-		final Date maxDateTime = SDF.parse(maxDateTimeStr);
+		final Date minDateTime = SDF.parse(minDateTimeToFilterStr);
+		final Date maxDateTime = SDF.parse(maxDateTimeToFilterStr);
 
 		System.out.println(
-				"De  " + minDateTimeStr 
+				"De  " + minDateTimeToFilterStr 
 				+ "\r\n" 
-				+ "Até " + maxDateTimeStr 
+				+ "Até " + maxDateTimeToFilterStr 
 				+ "\r\n" 
 				+ "Consumo (kWh): " 
 				+ databaseSonoffPowElite.calculateConsumption(minDateTime, maxDateTime));
+		
+		
 
 		System.out.println();
 		System.out.println("Por dia:\r\n" + 
